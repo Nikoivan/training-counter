@@ -1,0 +1,14 @@
+.traininglist__header {
+  padding: 0 30px;
+  min-width: 500px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  gap: 100px;
+}
+
+.traininglist__list {
+  padding: 15px 45px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+}

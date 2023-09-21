@@ -1,15 +1,12 @@
 export type FormStateType = {
   date: string;
-  dist: number;
+  dist: number | "";
 };
 
-export type FormSetStateType = (args: FormStateType) => FormStateType;
-
-export type FormUseStateType = [
-  formState: FormStateType,
-  setStateForm: FormSetStateType
-];
-
-export type TrainingFormProps = {
-  props: { formState: FormStateType; setStateForm: FormSetStateType };
+export type ListStateType = {
+  date: string;
+  dist: number | "";
+  timestamp: number;
 };
+
+export type ClickHandlerType = { callback: (arg: FormStateType) => void };

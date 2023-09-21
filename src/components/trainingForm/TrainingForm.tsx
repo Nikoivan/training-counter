@@ -1,55 +1,68 @@
-import { FormEvent, ChangeEvent, useState, Dispatch } from "react";
-import {
-  FormStateType,
-  FormSetStateType,
-  FormUseStateType,
-} from "../../types/types";
+import "./trainingform.css";
+import { FormEvent, ChangeEvent, useState } from "react";
+import { FormStateType, ClickHandlerType } from "../../types/types";
 
-export default function TrainingForm({
-  props,
-}: {
-  props: {
-    formState: FormStateType;
-    setStateForm: (arg: FormStateType) => FormStateType;
-  };
-}) {
-  const { formState, setStateForm } = props;
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+export default function TrainingForm({ callback }: ClickHandlerType) {
+  const [formState, setStateForm] = useState<FormStateType>({
+    date: "",
+    dist: "",
+  });
+
+  const clickHandler = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(e);
+    if (
+      formState.date === "" ||
+      formState.dist === "" ||
+      !/^[0-9]{2}.[0-9]{2}.[0-9]{4}$/.test(formState.date)
+    ) {
+      return;
+    }
+    callback({ date: formState.date, dist: +formState.dist });
+    setStateForm(() => ({
+      date: "",
+      dist: "",
+    }));
   };
 
   const changeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = target;
+    if (!/^[0-9.]+$/.test(value) && value !== "") {
+      return;
+    }
     setStateForm((prevForm: FormStateType) => ({ ...prevForm, [name]: value }));
-    console.log(formState);
   };
 
   return (
-    <form className="form" onSubmit={submitHandler}>
+    <form className="form">
       <div className="form__date-wrap">
-        <label htmlFor="input-date" className="form__label"></label>
+        <label htmlFor="input-date" className="form__label">
+          Дата (ДД.ММ.ГГ)
+        </label>
         <input
           onChange={changeHandler}
-          className="form__input-date"
+          className="form__input"
           id="input-date"
           name="date"
           value={formState.date}
         />
       </div>
       <div className="form__dist-wrap">
-        <label htmlFor="input-dist" className="form__label"></label>
+        <label htmlFor="input-dist" className="form__label">
+          Пройдено км
+        </label>
         <input
           onChange={changeHandler}
           type="text"
-          className="form__input-dist"
+          className="form__input"
           id="input-dist"
           name="dist"
-          value={formState.dist === 0 ? "" : formState.dist}
+          value={formState.dist}
         />
       </div>
       <div className="form__btn-wrap">
-        <button>OK</button>
+        <button className="btn" onClick={clickHandler}>
+          OK
+        </button>
       </div>
     </form>
   );

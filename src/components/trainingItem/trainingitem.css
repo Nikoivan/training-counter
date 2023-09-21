@@ -1,0 +1,9 @@
+.list__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 150px;
+}
+
+.actions__edit {
+  margin-right: 10px;
+}

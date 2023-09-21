@@ -1,0 +1,27 @@
+.form {
+  display: flex;
+  align-items: end;
+  gap: 40px;
+}
+
+.form__label {
+  margin-bottom: 15px;
+}
+
+.form__label,
+.form__input-dist {
+  display: block;
+}
+
+.form__label {
+}
+
+.form__input,
+.btn {
+  height: 35px;
+}
+
+.btn {
+  text-align: center;
+  padding-bottom: 33px;
+}
