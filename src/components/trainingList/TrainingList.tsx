@@ -5,7 +5,13 @@ import TrainingItem from "../trainingItem/TrainingItem";
 export default function TrainingList({
   props,
 }: {
-  props: FormStateType[] | [];
+  props: {
+    list: FormStateType[] | [];
+    callbacks: {
+      editItem: (arg: string) => void;
+      deleteItem: (arg: string) => void;
+    };
+  };
 }) {
   return (
     <>
@@ -15,8 +21,11 @@ export default function TrainingList({
         <span className="header__actions">Действия</span>
       </div>
       <ul className="traininglist__list">
-        {props.map((el, id) => (
-          <TrainingItem key={id} props={el} />
+        {props.list.map((el, id) => (
+          <TrainingItem
+            key={id}
+            props={{ item: el, callbacks: props.callbacks }}
+          />
         ))}
       </ul>
     </>

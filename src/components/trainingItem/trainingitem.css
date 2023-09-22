@@ -7,3 +7,8 @@
 .actions__edit {
   margin-right: 10px;
 }
+
+.actions__delete,
+.actions__edit:hover {
+  cursor: pointer;
+}

@@ -1,27 +1,35 @@
 import "./trainingform.css";
-import { FormEvent, ChangeEvent, useState } from "react";
-import { FormStateType, ClickHandlerType } from "../../types/types";
+import { FormEvent, ChangeEvent, useState, Dispatch } from "react";
+import { FormStateType } from "../../types/types";
 
-export default function TrainingForm({ callback }: ClickHandlerType) {
-  const [formState, setStateForm] = useState<FormStateType>({
-    date: "",
-    dist: "",
-  });
+export default function TrainingForm({
+  props,
+}: {
+  props: {
+    callback: (arg: FormStateType) => void;
+    formUseState: {
+      formState: FormStateType;
+       function setStateForm(params:FormStateType) { };
+  };
+}) {
+  const { formState, setStateForm } = props.formUseState;
 
   const clickHandler = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (
       formState.date === "" ||
-      formState.dist === "" ||
+      formState.dist === 0 ||
       !/^[0-9]{2}.[0-9]{2}.[0-9]{4}$/.test(formState.date)
     ) {
       return;
     }
-    callback({ date: formState.date, dist: +formState.dist });
-    setStateForm(() => ({
+    props.callback({ date: formState.date, dist: +formState.dist });
+
+    const empty = {
       date: "",
-      dist: "",
-    }));
+      dist: 0,
+    };
+    setStateForm(empty);
   };
 
   const changeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +64,7 @@ export default function TrainingForm({ callback }: ClickHandlerType) {
           className="form__input"
           id="input-dist"
           name="dist"
-          value={formState.dist}
+          value={!formState.dist || formState.dist === 0 ? "" : formState.dist}
         />
       </div>
       <div className="form__btn-wrap">

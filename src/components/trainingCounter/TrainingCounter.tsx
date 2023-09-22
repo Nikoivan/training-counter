@@ -1,14 +1,27 @@
-import { Dispatch, useState } from "react";
+import { Dispatch, useState, useRef } from "react";
 import moment from "moment";
 import { FormStateType, ListStateType } from "../../types/types";
+import checkDublicate from "../../functions/checkdublicate";
 import TrainingForm from "../trainingForm/TrainingForm";
 import TrainingList from "../trainingList/TrainingList";
 
 export default function TrainingCounter() {
   const [trainingList, setList] = useState<FormStateType[]>([]);
+  const [formState, setStateForm] = useState<FormStateType>({
+    date: "",
+    dist: 0,
+  });
 
-  const createTask = (arg: FormStateType) => {
-    setList((prevList) => [...prevList, arg]);
+  const createItem = (arg: FormStateType) => {
+    setList((prevList) => [...checkDublicate(prevList, arg)]);
+  };
+
+  const deleteItem = (arg: string) => {
+    setList((prevList) => [...prevList.filter((el) => el.date !== arg)]);
+  };
+
+  const editItem = (arg: string) => {
+    setList((prevList) => [...prevList.filter((el) => el.date !== arg)]);
   };
 
   let list = trainingList.map((el) => {
@@ -26,17 +39,16 @@ export default function TrainingCounter() {
 
   return (
     <div className="counter">
-      <TrainingForm callback={createTask} />
-      <TrainingList props={list} />
+      <TrainingForm
+        props={{
+          callback: createItem,
+          formUseState: {
+            formState,
+            setStateForm,
+          },
+        }}
+      />
+      <TrainingList props={{ list, callbacks: { editItem, deleteItem } }} />
     </div>
   );
 }
-
-/*
-const task = {
-      date: arg.date,
-      dist: arg.dist,
-      timestamp: new Date(
-        moment(`${arg.date}`, "DD.MM.YYYY").format("YYYY.MM.DD")
-      ).getTime(),
-    };*/

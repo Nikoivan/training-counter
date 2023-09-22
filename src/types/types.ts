@@ -1,11 +1,11 @@
 export type FormStateType = {
   date: string;
-  dist: number | "";
+  dist: number;
 };
 
 export type ListStateType = {
   date: string;
-  dist: number | "";
+  dist: number;
   timestamp: number;
 };
 
