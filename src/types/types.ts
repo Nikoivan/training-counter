@@ -3,6 +3,11 @@ export type FormStateType = {
   dist: number;
 };
 
+export type InputType = {
+  date?: string;
+  dist?: number;
+};
+
 export type ListStateType = {
   date: string;
   dist: number;

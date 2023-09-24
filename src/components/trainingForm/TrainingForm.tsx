@@ -1,5 +1,5 @@
 import "./trainingform.css";
-import { FormEvent, ChangeEvent, useState, Dispatch } from "react";
+import { FormEvent, ChangeEvent } from "react";
 import { FormStateType } from "../../types/types";
 
 export default function TrainingForm({
@@ -9,10 +9,11 @@ export default function TrainingForm({
     callback: (arg: FormStateType) => void;
     formUseState: {
       formState: FormStateType;
-       function setStateForm(params:FormStateType) { };
+      changeHandler: (arg: ChangeEvent<HTMLInputElement>) => void;
+    };
   };
 }) {
-  const { formState, setStateForm } = props.formUseState;
+  const { formState, changeHandler } = props.formUseState;
 
   const clickHandler = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -24,20 +25,6 @@ export default function TrainingForm({
       return;
     }
     props.callback({ date: formState.date, dist: +formState.dist });
-
-    const empty = {
-      date: "",
-      dist: 0,
-    };
-    setStateForm(empty);
-  };
-
-  const changeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = target;
-    if (!/^[0-9.]+$/.test(value) && value !== "") {
-      return;
-    }
-    setStateForm((prevForm: FormStateType) => ({ ...prevForm, [name]: value }));
   };
 
   return (

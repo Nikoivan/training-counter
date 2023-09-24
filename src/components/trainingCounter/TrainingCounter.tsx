@@ -1,19 +1,31 @@
-import { Dispatch, useState, useRef } from "react";
+import { useState, ChangeEvent } from "react";
 import moment from "moment";
-import { FormStateType, ListStateType } from "../../types/types";
+import { FormStateType } from "../../types/types";
 import checkDublicate from "../../functions/checkdublicate";
 import TrainingForm from "../trainingForm/TrainingForm";
 import TrainingList from "../trainingList/TrainingList";
 
 export default function TrainingCounter() {
   const [trainingList, setList] = useState<FormStateType[]>([]);
-  const [formState, setStateForm] = useState<FormStateType>({
+  const [formState, setFormState] = useState({
     date: "",
     dist: 0,
   });
 
+  const changeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = target;
+    if (!/^[0-9.]+$/.test(value) && value !== "") {
+      return;
+    }
+    setFormState((prevForm) => ({ ...prevForm, [name]: value }));
+  };
+
   const createItem = (arg: FormStateType) => {
     setList((prevList) => [...checkDublicate(prevList, arg)]);
+    setFormState({
+      date: "",
+      dist: 0,
+    });
   };
 
   const deleteItem = (arg: string) => {
@@ -21,6 +33,10 @@ export default function TrainingCounter() {
   };
 
   const editItem = (arg: string) => {
+    const item = trainingList.find((el) => el.date === arg);
+    if (item) {
+      setFormState(item);
+    }
     setList((prevList) => [...prevList.filter((el) => el.date !== arg)]);
   };
 
@@ -42,10 +58,7 @@ export default function TrainingCounter() {
       <TrainingForm
         props={{
           callback: createItem,
-          formUseState: {
-            formState,
-            setStateForm,
-          },
+          formUseState: { formState, changeHandler },
         }}
       />
       <TrainingList props={{ list, callbacks: { editItem, deleteItem } }} />
